@@ -1,2 +1,2 @@
 # EFactSum
-Code for Improving Factuality of Abstractive Summarization without Sacrificing Summary Quality ACL'23
+This repository contains the code for the paper: Improving Factuality of Abstractive Summarization without Sacrificing Summary Quality **ACL 2023**
