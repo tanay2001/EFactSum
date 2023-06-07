@@ -11,8 +11,11 @@ This repository contains the code for the paper: Improving Factuality of Abstrac
 - [Acknowlegements](#acknowlegements)
 
 ## Overview
+Improving factual consistency of abstractive summarization has been a widely studied topic. However, most of the prior works on training factuality-aware models have ignored the negative effect it has on summary quality. We propose EFactSum (i.e., **E**ffective **Fact**ual **Sum**marization), a candidate summary generation and ranking technique to improve summary factuality without sacrificing summary quality. We show that using a contrastive learning framework ([Liu et al. 2022](https://aclanthology.org/2022.acl-long.207.pdf)) with our refined candidate summaries leads to significant gains on both factuality and similarity-based metrics. Specifically, we propose a ranking strategy in which we effectively combine two metrics, thereby preventing any conflict during training. Models trained using our approach show up to 6 points of absolute improvement over the base model with respect to FactCC on XSUM and 11 points on CNN/DM, without negatively affecting either similarity-based metrics or absractiveness.
 
 ## Generating data
+
+Alternatively, you can download the data from these links [XSUM](https://drive.google.com/file/d/1v8UReXqlE7_9K2SZe6qG9NSMyOuqSiTI/view?usp=sharing), [CNN/DM](https://drive.google.com/file/d/1Co0cIjQExn6YpG1C8PWcolppZiii7wgi/view?usp=sharing)
 
 ## Training
 
@@ -22,10 +25,10 @@ This repository contains the code for the paper: Improving Factuality of Abstrac
 ## Model Outputs
 We summarize the outputs from our models below
 
-|          | Source | Model Output | Reference Output |
-|----------|---------|---------|---------|
-| CNNDM    | [cnndm.test.source](output/cnndm.test.source.txt) | BART - [cnndm.test.ours](output/cnndm.test.ours.txt) | [cnndm.test.target](output/cnndm.test.target.txt)  |
-| XSum     | [xsum.test.source](output/xsum.test.source.txt) |  PEGASUS - [xsum.test.ours](output/xsum.test.ours.txt) | [xsum.test.target](output/xsum.test.target.text)  |
+|          | Model |  Source | Model Output | Reference Output |
+|----------|---------| --------- | ---------|---------|
+| CNNDM    | `tanay/efactsum-bart-cnndm` | [cnndm.test.source](outputs/cnndm.test.source.txt) | [cnndm.test.ours](outputs/cnndm.test.ours.txt) | [cnndm.test.target](outputs/cnndm.test.target.txt)  |
+| XSum     | `tanay/efactsum-pegasus-xsum` | [xsum.test.source](outputs/xsum.test.source.txt) |  [xsum.test.ours](outputs/xsum.test.ours.txt) | [xsum.test.target](outputs/xsum.test.target.text)  |
 
 
 
@@ -62,4 +65,3 @@ inputs = tokenizer([article], max_length=max_length, return_tensors="pt", trunca
 summary_ids = model.generate(inputs["input_ids"])
 print(tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0])
 ```
-
