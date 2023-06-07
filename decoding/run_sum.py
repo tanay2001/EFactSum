@@ -24,18 +24,17 @@ def main():
 
     tokenizer = PegasusTokenizerFast.from_pretrained(args.model_path)
     model = PegasusForConditionalGeneration.from_pretrained(args.model_path)
-    #model.cuda()
+    model.cuda()
     model.eval()
 
     print('Model loaded')
 
-    all_outputs = []
     os.makedirs(args.output_dir, exist_ok=True)
     f = open(os.path.join(args.output_dir, 'generations.txt'), 'w')
     with torch.no_grad():
         for batch_start in tqdm(range(0, len(sources), args.batch_size)):
             batch_sources = sources[batch_start:batch_start+args.batch_size]
-            inputs = tokenizer(batch_sources, return_tensors="pt", truncation=True, max_length=args.max_length, padding=True)#.to('cuda')
+            inputs = tokenizer(batch_sources, return_tensors="pt", truncation=True, max_length=args.max_length, padding=True).to('cuda')
             outputs = model.generate(**inputs,
                             max_length=args.gen_max_len + 2,  
                             min_length=args.gen_min_len + 1, 
@@ -46,7 +45,6 @@ def main():
             decoded = tokenizer.batch_decode(outputs, skip_special_tokens=True, clean_up_tokenization_spaces=True)
             for summary in decoded:
                 f.write(summary + '\n')
-            #all_outputs.extend(decoded)
 
 
 if __name__ == '__main__':
