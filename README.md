@@ -1,5 +1,5 @@
 # EFactSum
-This repository contains the code for the paper: Improving Factuality of Abstractive Summarization without Sacrificing Summary Quality **ACL 2023**
+This repository contains the code for the paper: [Improving Factuality of Abstractive Summarization without Sacrificing Summary Quality](https://arxiv.org/abs/2305.14981) **ACL 2023**
 
 ## Quick Links
 
@@ -14,12 +14,42 @@ This repository contains the code for the paper: Improving Factuality of Abstrac
 Improving factual consistency of abstractive summarization has been a widely studied topic. However, most of the prior works on training factuality-aware models have ignored the negative effect it has on summary quality. We propose EFactSum (i.e., **E**ffective **Fact**ual **Sum**marization), a candidate summary generation and ranking technique to improve summary factuality without sacrificing summary quality. We show that using a contrastive learning framework ([Liu et al. 2022](https://aclanthology.org/2022.acl-long.207.pdf)) with our refined candidate summaries leads to significant gains on both factuality and similarity-based metrics. Specifically, we propose a ranking strategy in which we effectively combine two metrics, thereby preventing any conflict during training. Models trained using our approach show up to 6 points of absolute improvement over the base model with respect to FactCC on XSUM and 11 points on CNN/DM, without negatively affecting either similarity-based metrics or absractiveness.
 
 ## Generating data
-
-Alternatively, you can download the data from these links [XSUM](https://drive.google.com/file/d/1v8UReXqlE7_9K2SZe6qG9NSMyOuqSiTI/view?usp=sharing), [CNN/DM](https://drive.google.com/file/d/1Co0cIjQExn6YpG1C8PWcolppZiii7wgi/view?usp=sharing)
+For each training article, we sample 16 summaries using the base model (PEGASUS/BART) and 16 summaries using [CLIFF](https://github.com/ShuyangCao/cliff_summ). Each summary is scored along two axes - Rouge and FactCC, and out of these 32 summaries 6 are chosen based on the ranking strategy (refer to section 2). You can download the data from these links [XSUM](https://drive.google.com/file/d/1v8UReXqlE7_9K2SZe6qG9NSMyOuqSiTI/view?usp=sharing), [CNN/DM](https://drive.google.com/file/d/1Co0cIjQExn6YpG1C8PWcolppZiii7wgi/view?usp=sharing)
 
 ## Training
 
 ## Decoding
+The script for generating the summaries using our trained models is in the [decoding](decoding) folder. <br>
+
+For XSUM run
+```
+python3 run_sum.py \
+    --model_path tanay/efactsum-pegasus-xsum \
+    --source ../outputs/xsum.test.source.txt \
+    --output_dir $OUTPUT_DIR \
+    --batch_size 2 \
+    --max_length 512 \
+    --gen_max_len 62 \
+    --gen_min_len 11 \
+    --num_beams 8 \
+    --length_penalty 0.6
+```
+<br>
+
+For CNNDM run
+```
+python3 run_sum.py \
+    --model_path tanay/efactsum-pegasus-cnndm \
+    --source ../outputs/xsum.test.source.txt \
+    --output_dir $OUTPUT_DIR \
+    --batch_size 2 \
+    --max_length 1024 \
+    --gen_max_len 140 \
+    --gen_min_len 55 \
+    --num_beams 4 \
+    --length_penalty 2
+```
+
 
 
 ## Model Outputs
