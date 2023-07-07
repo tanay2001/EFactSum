@@ -39,7 +39,7 @@ python3 run_sum.py \
 For CNNDM run
 ```
 python3 run_sum.py \
-    --model_path tanay/efactsum-pegasus-cnndm \
+    --model_path tanay/efactsum-bart-cnndm \
     --source ../outputs/xsum.test.source.txt \
     --output_dir $OUTPUT_DIR \
     --batch_size 2 \
